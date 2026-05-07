@@ -112,26 +112,85 @@
 
   /* AGENDA */
   .agenda-section { background: var(--surface); }
+  .agenda-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .agenda-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+  .agenda-add-btn, .agenda-view-btn {
+    border: none; border-radius: 16px; padding: 12px 18px; cursor: pointer; font-family: var(--font-body);
+    font-weight: 800; display: inline-flex; align-items: center; gap: 8px; transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  }
+  .agenda-add-btn { background: var(--red); color: var(--white); box-shadow: 0 16px 32px rgba(217,21,43,0.18); }
+  .agenda-view-btn { background: var(--white); color: var(--text); border: 1px solid var(--border); }
+  .agenda-add-btn:hover, .agenda-view-btn:hover { transform: translateY(-2px); }
+  .agenda-view-btn.active { background: var(--blue); color: var(--white); border-color: var(--blue); }
   .event-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
   .event-card {
     background: var(--white); border: 1px solid var(--border); border-radius: var(--radius);
     overflow: hidden; transition: transform 0.2s, box-shadow 0.2s;
     box-shadow: 0 14px 34px rgba(5,5,5,0.04);
+    animation: cardIn 0.45s ease both;
   }
+  @keyframes cardIn { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
   .event-card:hover { transform: translateY(-3px); box-shadow: 0 18px 46px rgba(0,102,179,0.13); }
-  .event-header { background: var(--surface-strong); padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between; }
-  .event-date-badge { background: var(--yellow); color: var(--text); border-radius: 8px; padding: 4px 10px; font-weight: 800; font-size: 0.8rem; }
-  .event-category { font-size: 0.7rem; color: var(--purple); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 800; }
+  .event-poster { width: 100%; aspect-ratio: 16 / 10; background: linear-gradient(135deg, rgba(217,21,43,0.12), rgba(0,102,179,0.16)); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .event-poster img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .event-poster-placeholder { color: var(--text-muted); font-size: 0.82rem; font-weight: 800; }
+  .event-header { background: var(--surface-strong); padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
+  .event-date-badge { background: var(--yellow); color: var(--text); border-radius: 8px; padding: 4px 10px; font-weight: 800; font-size: 0.8rem; white-space: nowrap; }
+  .event-category { font-size: 0.7rem; color: var(--white); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 800; border-radius: 999px; padding: 5px 10px; white-space: nowrap; }
+  .event-category.culte { background: var(--red); }
+  .event-category.cellule { background: var(--blue); }
+  .event-category.jeune { background: #14A46C; }
+  .event-category.special { background: var(--purple); }
   .event-body { padding: 1.25rem; }
   .event-title { font-family: var(--font-display); font-size: 1.1rem; color: var(--text); margin-bottom: 0.5rem; font-weight: 800; }
   .event-meta { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.4rem; display: flex; align-items: center; gap: 6px; }
   .event-meta svg { width: 14px; height: 14px; flex-shrink: 0; }
-  .event-footer { padding: 0 1.25rem 1.25rem; }
-  .event-btn { width: 100%; background: #F5F8FC; border: 1px solid var(--border-strong); color: var(--blue); padding: 10px; border-radius: 8px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; font-family: var(--font-body); font-weight: 800; }
+  .event-organizer { color: var(--purple); font-size: 0.78rem; font-weight: 800; margin-top: 0.8rem; }
+  .event-count { background: #F5F8FC; border-radius: 12px; padding: 8px 10px; color: var(--text); font-size: 0.78rem; font-weight: 800; margin-top: 1rem; display: inline-flex; align-items: center; gap: 6px; }
+  .event-footer { padding: 0 1.25rem 1.25rem; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .event-btn { width: 100%; background: #F5F8FC; border: 1px solid var(--border-strong); color: var(--blue); padding: 10px; border-radius: 12px; font-size: 0.82rem; cursor: pointer; transition: all 0.2s; font-family: var(--font-body); font-weight: 800; }
   .event-btn:hover { background: var(--blue); color: var(--surface-strong); }
+  .event-btn.danger { color: var(--red); border-color: rgba(217,21,43,0.22); }
+  .event-btn.danger:hover { background: var(--red); color: var(--white); }
+  .event-btn.full { grid-column: 1 / -1; }
   .filter-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 2rem; }
   .filter-btn { padding: 8px 18px; border-radius: 14px; border: 1px solid var(--border); font-size: 0.82rem; cursor: pointer; background: var(--white); color: var(--text-muted); transition: all 0.2s; font-family: var(--font-body); font-weight: 700; }
   .filter-btn.active { background: var(--blue); border-color: var(--blue); color: var(--surface-strong); font-weight: 800; }
+  .calendar-view { display: none; background: var(--white); border: 1px solid var(--border); border-radius: 18px; padding: 1.25rem; box-shadow: 0 14px 34px rgba(5,5,5,0.04); }
+  .calendar-view.open { display: block; animation: cardIn 0.35s ease both; }
+  .calendar-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+  .calendar-day { border: 1px solid var(--border); border-radius: 14px; padding: 1rem; background: #FAFBFD; }
+  .calendar-date { color: var(--red); font-weight: 900; margin-bottom: 0.75rem; }
+  .calendar-event { border-left: 4px solid var(--blue); padding-left: 0.75rem; margin-bottom: 0.75rem; font-size: 0.82rem; color: var(--text-muted); }
+  .calendar-event strong { color: var(--text); display: block; }
+  .program-modal { position: fixed; inset: 0; z-index: 220; display: none; align-items: center; justify-content: center; padding: 1.5rem; background: rgba(5,5,5,0.58); backdrop-filter: blur(10px); }
+  .program-modal.open { display: flex; }
+  .program-dialog { width: min(920px, 100%); max-height: 92vh; overflow: auto; background: var(--white); border-radius: 22px; box-shadow: 0 30px 90px rgba(0,0,0,0.24); animation: modalIn 0.28s ease both; }
+  @keyframes modalIn { from { opacity: 0; transform: translateY(22px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  .program-head { padding: 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+  .program-head h3 { font-size: 1.35rem; line-height: 1.2; font-weight: 900; }
+  .program-close { border: none; width: 42px; height: 42px; border-radius: 50%; background: #F5F8FC; cursor: pointer; font-size: 1.2rem; color: var(--text); }
+  .program-form { padding: 1.5rem; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 1.5rem; }
+  .program-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .program-field.full { grid-column: 1 / -1; }
+  .program-field label { display: block; color: var(--text-muted); font-size: 0.8rem; font-weight: 800; margin-bottom: 6px; }
+  .program-field input, .program-field textarea, .program-field select {
+    width: 100%; border: 1px solid var(--border); border-radius: 14px; padding: 12px 14px; background: #FAFBFD;
+    font-family: var(--font-body); color: var(--text); outline: none;
+  }
+  .program-field textarea { min-height: 112px; resize: vertical; }
+  .poster-preview { border: 1px dashed var(--border-strong); border-radius: 18px; background: #FAFBFD; min-height: 360px; display: flex; align-items: center; justify-content: center; overflow: hidden; text-align: center; color: var(--text-muted); font-weight: 800; }
+  .poster-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .program-submit-row { grid-column: 1 / -1; display: flex; justify-content: flex-end; gap: 0.75rem; flex-wrap: wrap; padding-top: 0.5rem; }
+  .program-submit-row button { border: none; border-radius: 14px; padding: 12px 18px; font-family: var(--font-body); font-weight: 900; cursor: pointer; }
+  .program-cancel { background: #F5F8FC; color: var(--text); }
+  .program-save { background: var(--red); color: var(--white); box-shadow: 0 14px 28px rgba(217,21,43,0.16); }
+  @media(max-width: 760px) {
+    .program-form { grid-template-columns: 1fr; }
+    .program-fields { grid-template-columns: 1fr; }
+    .poster-preview { min-height: 240px; }
+    .event-footer { grid-template-columns: 1fr; }
+  }
 
   /* PRIERE */
   .priere-section { background: var(--surface); }
@@ -353,16 +412,91 @@
       <h2 class="section-title">Agenda de l'église</h2>
       <div class="section-line"></div>
     </div>
-    <div class="filter-row fade-up">
+    <div class="agenda-toolbar fade-up">
+      <div class="filter-row" style="margin-bottom:0">
       <button class="filter-btn active" onclick="filterEvents('all',this)">Tous</button>
       <button class="filter-btn" onclick="filterEvents('culte',this)">Cultes</button>
       <button class="filter-btn" onclick="filterEvents('cellule',this)">Cellules</button>
-      <button class="filter-btn" onclick="filterEvents('jeunes',this)">Jeunes</button>
+      <button class="filter-btn" onclick="filterEvents('jeune',this)">Jeunes</button>
       <button class="filter-btn" onclick="filterEvents('special',this)">Spéciaux</button>
+      </div>
+      <div class="agenda-actions">
+        <button class="agenda-view-btn active" id="cardsViewBtn" onclick="setAgendaView('cards')">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          Cartes
+        </button>
+        <button class="agenda-view-btn" id="calendarViewBtn" onclick="setAgendaView('calendar')">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Calendrier
+        </button>
+        <button class="agenda-add-btn" onclick="openProgramForm()">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Ajouter ton programme
+        </button>
+      </div>
     </div>
     <div class="event-grid" id="eventGrid"></div>
+    <div class="calendar-view" id="calendarView">
+      <div class="calendar-grid" id="calendarGrid"></div>
+    </div>
   </div>
 </section>
+
+<div class="program-modal" id="programModal">
+  <div class="program-dialog">
+    <div class="program-head">
+      <h3 id="programFormTitle">Ajouter ton programme</h3>
+      <button class="program-close" onclick="closeProgramForm()" aria-label="Fermer">×</button>
+    </div>
+    <form class="program-form" id="programForm">
+      <input type="hidden" id="eventEditId">
+      <div class="program-fields">
+        <div class="program-field full">
+          <label for="eventTitle">Nom du programme</label>
+          <input type="text" id="eventTitle" required placeholder="Ex: Nuit de louange">
+        </div>
+        <div class="program-field full">
+          <label for="eventDesc">Description de l'Ã©vÃ©nement</label>
+          <textarea id="eventDesc" required placeholder="PrÃ©sentez briÃ¨vement le programme..."></textarea>
+        </div>
+        <div class="program-field">
+          <label for="eventDate">Date</label>
+          <input type="date" id="eventDate" required>
+        </div>
+        <div class="program-field">
+          <label for="eventTime">Heure</label>
+          <input type="time" id="eventTime" required>
+        </div>
+        <div class="program-field">
+          <label for="eventPlace">Lieu</label>
+          <input type="text" id="eventPlace" required placeholder="Ex: Temple principal">
+        </div>
+        <div class="program-field">
+          <label for="eventOrganizer">MinistÃ¨re / organisateur</label>
+          <input type="text" id="eventOrganizer" required placeholder="Ex: MinistÃ¨re des jeunes">
+        </div>
+        <div class="program-field">
+          <label for="eventCategory">CatÃ©gorie</label>
+          <select id="eventCategory" required>
+            <option value="jeune">Jeune</option>
+            <option value="cellule">Cellule</option>
+            <option value="culte">Culte</option>
+            <option value="special">SpÃ©ciaux</option>
+          </select>
+        </div>
+        <div class="program-field">
+          <label for="eventPoster">Affiche de l'Ã©vÃ©nement</label>
+          <input type="file" id="eventPoster" accept="image/*">
+        </div>
+      </div>
+      <div class="poster-preview" id="posterPreview">PrÃ©visualisation de l'affiche</div>
+      <div class="program-submit-row">
+        <button type="button" class="program-cancel" onclick="closeProgramForm()">Annuler</button>
+        <button type="submit" class="program-save">Publier le programme</button>
+      </div>
+    </form>
+  </div>
+</div>
 
 <!-- PRIERE -->
 <section class="priere-section" id="priere">
@@ -601,15 +735,20 @@ const versets = [
 ];
 let versetIdx = 0;
 
-const events = [
-  { id:1, title:"Culte du Dimanche", date:"11 Mai", heure:"9h00 & 11h00", lieu:"Église principale, Cocody", cat:"culte", desc:"Service dominical avec louange et prédication." },
-  { id:2, title:"Étude biblique", date:"13 Mai", heure:"19h00", lieu:"Salle A, Église principale", cat:"cellule", desc:"Étude approfondie de l'Évangile de Jean." },
-  { id:3, title:"Rencontre des Jeunes", date:"15 Mai", heure:"18h00", lieu:"Centre jeunesse, Marcory", cat:"jeunes", desc:"Soirée de louange et partage pour les 15-30 ans." },
-  { id:4, title:"Nuit de Prière", date:"16 Mai", heure:"22h00 – 5h00", lieu:"Église principale", cat:"special", desc:"Une nuit entière de prière et d'intercession." },
-  { id:5, title:"Culte de Famille", date:"18 Mai", heure:"10h00", lieu:"Église principale", cat:"culte", desc:"Culte spécial pour toutes les familles." },
-  { id:6, title:"Retraite Spirituelle", date:"24 Mai", heure:"8h00", lieu:"Yamoussoukro", cat:"special", desc:"Week-end de retraite et ressourcement spirituel." },
+const defaultEvents = [
+  { id:'base-1', title:"Culte du Dimanche", date:"2026-05-11", dateLabel:"11 Mai", time:"09:00", lieu:"Église principale, Cocody", cat:"culte", desc:"Service dominical avec louange et prédication.", organizer:"FOURCOM DIGITAL", participants:42, owned:false, poster:"" },
+  { id:'base-2', title:"Étude biblique", date:"2026-05-13", dateLabel:"13 Mai", time:"19:00", lieu:"Salle A, Église principale", cat:"cellule", desc:"Étude approfondie de l'Évangile de Jean.", organizer:"Cellules d'Abidjan", participants:18, owned:false, poster:"" },
+  { id:'base-3', title:"Rencontre des Jeunes", date:"2026-05-15", dateLabel:"15 Mai", time:"18:00", lieu:"Centre jeunesse, Marcory", cat:"jeune", desc:"Soirée de louange et partage pour les 15-30 ans.", organizer:"Ministère des jeunes", participants:35, owned:false, poster:"" },
+  { id:'base-4', title:"Nuit de Prière", date:"2026-05-16", dateLabel:"16 Mai", time:"22:00", lieu:"Église principale", cat:"special", desc:"Une nuit entière de prière et d'intercession.", organizer:"Intercession", participants:64, owned:false, poster:"" },
+  { id:'base-5', title:"Culte de Famille", date:"2026-05-18", dateLabel:"18 Mai", time:"10:00", lieu:"Église principale", cat:"culte", desc:"Culte spécial pour toutes les familles.", organizer:"Familles", participants:53, owned:false, poster:"" },
+  { id:'base-6', title:"Retraite Spirituelle", date:"2026-05-24", dateLabel:"24 Mai", time:"08:00", lieu:"Yamoussoukro", cat:"special", desc:"Week-end de retraite et ressourcement spirituel.", organizer:"Formation", participants:27, owned:false, poster:"" },
 ];
+let events = [...defaultEvents, ...JSON.parse(localStorage.getItem('userEvents') || '[]')];
 let eventFilter = 'all';
+let agendaView = 'cards';
+let currentEventId = null;
+let posterDraft = '';
+const categoryLabels = { jeune:'Jeune', cellule:'Cellule', culte:'Culte', special:'Spéciaux' };
 let prieres = [
   { nom:"Marie K.", texte:"Prière pour la guérison de mon père hospitalisé cette semaine.", count:14 },
   { nom:"Jean-Paul A.", texte:"Demande de sagesse pour une décision importante dans ma famille.", count:8 },
@@ -659,25 +798,54 @@ let entraideFilter = 'all';
 let audioPlaying = false, audioSec = 0, audioInterval = null;
 
 // RENDER FUNCTIONS
+function escapeHtml(value) {
+  return String(value || '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+
+function formatEventDate(event) {
+  if (event.dateLabel) return event.dateLabel;
+  if (!event.date) return '';
+  const d = new Date(event.date + 'T00:00:00');
+  return d.toLocaleDateString('fr-FR', { day:'2-digit', month:'short', year:'numeric' });
+}
+
+function formatEventTime(event) {
+  return event.time || event.heure || '';
+}
+
+function persistUserEvents() {
+  localStorage.setItem('userEvents', JSON.stringify(events.filter(e => e.owned)));
+}
+
 function renderEvents() {
   const grid = document.getElementById('eventGrid');
   const filtered = eventFilter === 'all' ? events : events.filter(e => e.cat === eventFilter);
-  grid.innerHTML = filtered.map(e => `
-    <div class="event-card">
+  grid.innerHTML = filtered.map((e, index) => `
+    <div class="event-card" style="animation-delay:${index * 0.04}s">
+      <div class="event-poster">
+        ${e.poster ? `<img src="${e.poster}" alt="Affiche ${escapeHtml(e.title)}">` : `<span class="event-poster-placeholder">Affiche de l'événement</span>`}
+      </div>
       <div class="event-header">
-        <span class="event-date-badge">${e.date}</span>
-        <span class="event-category">${e.cat}</span>
+        <span class="event-date-badge">${formatEventDate(e)}</span>
+        <span class="event-category ${e.cat}">${categoryLabels[e.cat] || e.cat}</span>
       </div>
       <div class="event-body">
-        <div class="event-title">${e.titre}</div>
-        <div class="event-meta"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> ${e.heure}</div>
-        <div class="event-meta"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> ${e.lieu}</div>
-        <div style="font-size:0.82rem;color:var(--text-muted);margin-top:6px">${e.desc}</div>
+        <div class="event-title">${escapeHtml(e.title)}</div>
+        <div class="event-meta"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> ${formatEventDate(e)}</div>
+        <div class="event-meta"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> ${escapeHtml(formatEventTime(e))}</div>
+        <div class="event-meta"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> ${escapeHtml(e.lieu)}</div>
+        <div style="font-size:0.82rem;color:var(--text-muted);margin-top:6px">${escapeHtml(e.desc)}</div>
+        <div class="event-organizer">${escapeHtml(e.organizer || 'Organisateur')}</div>
+        <div class="event-count">👥 ${e.participants || 0} participant(s)</div>
       </div>
       <div class="event-footer">
-        <button class="event-btn" onclick="openModal('${e.titre}','${e.date} à ${e.heure} — ${e.lieu}')">S'inscrire à cet événement</button>
+        <button class="event-btn" onclick="viewEvent('${e.id}')">Voir</button>
+        <button class="event-btn" onclick="setReminder('${e.id}')">Rappel</button>
+        ${e.owned ? `<button class="event-btn" onclick="editEvent('${e.id}')">Modifier</button><button class="event-btn danger" onclick="deleteEvent('${e.id}')">Supprimer</button>` : ''}
       </div>
     </div>`).join('');
+  if (!filtered.length) grid.innerHTML = '<div class="event-card" style="padding:1.5rem">Aucun programme dans cette catégorie pour le moment.</div>';
+  renderCalendar();
 }
 
 function renderPrieres() {
@@ -747,9 +915,138 @@ function renderEntraide() {
 }
 
 // ACTIONS
+function renderCalendar() {
+  const calendarGrid = document.getElementById('calendarGrid');
+  if (!calendarGrid) return;
+  const filtered = eventFilter === 'all' ? events : events.filter(e => e.cat === eventFilter);
+  const groups = filtered.reduce((acc, event) => {
+    const key = event.date || event.dateLabel || 'Sans date';
+    acc[key] = acc[key] || [];
+    acc[key].push(event);
+    return acc;
+  }, {});
+  calendarGrid.innerHTML = Object.keys(groups).sort().map(date => `
+    <div class="calendar-day">
+      <div class="calendar-date">${formatEventDate(groups[date][0])}</div>
+      ${groups[date].map(e => `
+        <div class="calendar-event">
+          <strong>${escapeHtml(e.title)}</strong>
+          ${escapeHtml(formatEventTime(e))} · ${escapeHtml(e.lieu)}
+        </div>`).join('')}
+    </div>`).join('');
+  if (!filtered.length) calendarGrid.innerHTML = '<div class="calendar-day">Aucun programme à afficher.</div>';
+}
+
+function setAgendaView(view) {
+  agendaView = view;
+  document.getElementById('eventGrid').style.display = view === 'cards' ? 'grid' : 'none';
+  document.getElementById('calendarView').classList.toggle('open', view === 'calendar');
+  document.getElementById('cardsViewBtn').classList.toggle('active', view === 'cards');
+  document.getElementById('calendarViewBtn').classList.toggle('active', view === 'calendar');
+  renderCalendar();
+}
+
+function openProgramForm(id = null) {
+  const form = document.getElementById('programForm');
+  form.reset();
+  posterDraft = '';
+  document.getElementById('eventEditId').value = '';
+  document.getElementById('posterPreview').innerHTML = "Prévisualisation de l'affiche";
+  document.getElementById('programFormTitle').textContent = 'Ajouter ton programme';
+  document.querySelector('.program-save').textContent = 'Publier le programme';
+  if (id) {
+    const event = events.find(e => e.id === id && e.owned);
+    if (!event) return;
+    document.getElementById('programFormTitle').textContent = 'Modifier le programme';
+    document.querySelector('.program-save').textContent = 'Enregistrer les changements';
+    document.getElementById('eventEditId').value = event.id;
+    document.getElementById('eventTitle').value = event.title;
+    document.getElementById('eventDesc').value = event.desc;
+    document.getElementById('eventDate').value = event.date || '';
+    document.getElementById('eventTime').value = event.time || '';
+    document.getElementById('eventPlace').value = event.lieu;
+    document.getElementById('eventOrganizer').value = event.organizer || '';
+    document.getElementById('eventCategory').value = event.cat;
+    posterDraft = event.poster || '';
+    if (posterDraft) document.getElementById('posterPreview').innerHTML = `<img src="${posterDraft}" alt="Affiche">`;
+  }
+  document.getElementById('programModal').classList.add('open');
+}
+
+function closeProgramForm() {
+  document.getElementById('programModal').classList.remove('open');
+}
+
+function saveProgram(e) {
+  e.preventDefault();
+  const editId = document.getElementById('eventEditId').value;
+  const payload = {
+    id: editId || 'user-' + Date.now(),
+    title: document.getElementById('eventTitle').value.trim(),
+    desc: document.getElementById('eventDesc').value.trim(),
+    date: document.getElementById('eventDate').value,
+    time: document.getElementById('eventTime').value,
+    lieu: document.getElementById('eventPlace').value.trim(),
+    organizer: document.getElementById('eventOrganizer').value.trim(),
+    cat: document.getElementById('eventCategory').value,
+    poster: posterDraft,
+    participants: editId ? (events.find(ev => ev.id === editId)?.participants || 0) : 0,
+    owned: true
+  };
+  if (editId) {
+    events = events.map(event => event.id === editId ? payload : event);
+    showToast('Programme modifié avec succès.');
+  } else {
+    events.unshift(payload);
+    showToast('Programme ajouté à l’agenda.');
+  }
+  persistUserEvents();
+  closeProgramForm();
+  renderEvents();
+}
+
+function editEvent(id) {
+  openProgramForm(id);
+}
+
+function deleteEvent(id) {
+  const event = events.find(e => e.id === id);
+  if (!event || !event.owned) return;
+  if (!confirm('Supprimer ce programme ?')) return;
+  events = events.filter(e => e.id !== id);
+  persistUserEvents();
+  renderEvents();
+  showToast('Programme supprimé.');
+}
+
+function viewEvent(id) {
+  const event = events.find(e => e.id === id);
+  if (!event) return;
+  currentEventId = id;
+  openModal(event.title, `${formatEventDate(event)} à ${formatEventTime(event)} — ${event.lieu}`);
+}
+
+function setReminder(id) {
+  const event = events.find(e => e.id === id);
+  if (!event) return;
+  if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission().catch(() => {});
+  }
+  const message = `Rappel activé pour ${event.title}.`;
+  showToast(message);
+  const eventDate = event.date && event.time ? new Date(`${event.date}T${event.time}`) : null;
+  if (eventDate && eventDate > new Date()) {
+    const delay = Math.min(eventDate.getTime() - Date.now(), 2147483647);
+    setTimeout(() => {
+      if ('Notification' in window && Notification.permission === 'granted') new Notification('Rappel programme', { body: event.title });
+      showToast(`Rappel : ${event.title} commence bientôt.`);
+    }, delay);
+  }
+}
+
 function filterEvents(cat, btn) {
   eventFilter = cat;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#agenda .filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   renderEvents();
 }
@@ -836,11 +1133,20 @@ function closeModal() {
 function submitInscription() {
   const nom = document.getElementById('inscNom').value.trim();
   if (!nom) { showToast('Veuillez entrer votre nom.'); return; }
+  if (currentEventId) {
+    const event = events.find(e => e.id === currentEventId);
+    if (event) {
+      event.participants = (event.participants || 0) + 1;
+      persistUserEvents();
+      renderEvents();
+    }
+  }
   closeModal();
   showToast('Inscription confirmée ! Vous recevrez un rappel. Béni sois-tu !');
   document.getElementById('inscNom').value = '';
   document.getElementById('inscTel').value = '';
   document.getElementById('inscEmail').value = '';
+  currentEventId = null;
 }
 
 function submitContact() {
@@ -897,6 +1203,23 @@ function showToast(msg) {
 // Close modal on overlay click
 document.getElementById('modalOverlay').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
+});
+
+document.getElementById('programModal').addEventListener('click', function(e) {
+  if (e.target === this) closeProgramForm();
+});
+
+document.getElementById('programForm').addEventListener('submit', saveProgram);
+
+document.getElementById('eventPoster').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function() {
+    posterDraft = reader.result;
+    document.getElementById('posterPreview').innerHTML = `<img src="${posterDraft}" alt="Affiche">`;
+  };
+  reader.readAsDataURL(file);
 });
 
 // Scroll animations
