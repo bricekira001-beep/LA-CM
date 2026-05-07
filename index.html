@@ -456,7 +456,7 @@
           <input type="text" id="eventTitle" required placeholder="Ex: Nuit de louange">
         </div>
         <div class="program-field full">
-          <label for="eventDesc">Description de l'Ã©vÃ©nement</label>
+          <label for="eventDesc">Description de l'événement</label>
           <textarea id="eventDesc" required placeholder="PrÃ©sentez briÃ¨vement le programme..."></textarea>
         </div>
         <div class="program-field">
@@ -472,24 +472,24 @@
           <input type="text" id="eventPlace" required placeholder="Ex: Temple principal">
         </div>
         <div class="program-field">
-          <label for="eventOrganizer">MinistÃ¨re / organisateur</label>
+          <label for="eventOrganizer">Nom de l'église / organisateur</label>
           <input type="text" id="eventOrganizer" required placeholder="Ex: MinistÃ¨re des jeunes">
         </div>
         <div class="program-field">
-          <label for="eventCategory">CatÃ©gorie</label>
+          <label for="eventCategory">Catégorie</label>
           <select id="eventCategory" required>
             <option value="jeune">Jeune</option>
             <option value="cellule">Cellule</option>
             <option value="culte">Culte</option>
-            <option value="special">SpÃ©ciaux</option>
+            <option value="special">Spéciaux</option>
           </select>
         </div>
         <div class="program-field">
-          <label for="eventPoster">Affiche de l'Ã©vÃ©nement</label>
+          <label for="eventPoster">Affiche de l'événement</label>
           <input type="file" id="eventPoster" accept="image/*">
         </div>
       </div>
-      <div class="poster-preview" id="posterPreview">PrÃ©visualisation de l'affiche</div>
+      <div class="poster-preview" id="posterPreview">Prévisualisation de l'affiche</div>
       <div class="program-submit-row">
         <button type="button" class="program-cancel" onclick="closeProgramForm()">Annuler</button>
         <button type="submit" class="program-save">Publier le programme</button>
@@ -708,15 +708,13 @@
     <input type="text" id="inscNom" placeholder="Jean Kouassi">
     <label>Téléphone / WhatsApp</label>
     <input type="tel" id="inscTel" placeholder="+225 07 00 00 00 00">
-    <label>Email (facultatif)</label>
-    <input type="email" id="inscEmail" placeholder="vous@email.com">
     <label>Nombre de personnes</label>
     <select id="inscNbre">
       <option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option>
     </select>
     <div class="modal-footer">
       <button class="modal-close" onclick="closeModal()">Annuler</button>
-      <button class="modal-submit" onclick="submitInscription()">Confirmer l'inscription ✦</button>
+      <button class="modal-submit" onclick="submitInscription()">Participer ✦</button>
     </div>
   </div>
 </div>
@@ -749,6 +747,7 @@ let agendaView = 'cards';
 let currentEventId = null;
 let posterDraft = '';
 const categoryLabels = { jeune:'Jeune', cellule:'Cellule', culte:'Culte', special:'Spéciaux' };
+let participantsByEvent = JSON.parse(localStorage.getItem('participantsByEvent') || '{}');
 let prieres = [
   { nom:"Marie K.", texte:"Prière pour la guérison de mon père hospitalisé cette semaine.", count:14 },
   { nom:"Jean-Paul A.", texte:"Demande de sagesse pour une décision importante dans ma famille.", count:8 },
@@ -839,7 +838,7 @@ function renderEvents() {
         <div class="event-count">👥 ${e.participants || 0} participant(s)</div>
       </div>
       <div class="event-footer">
-        <button class="event-btn" onclick="viewEvent('${e.id}')">Voir</button>
+        <button class="event-btn" onclick="participateEvent('${e.id}')">Participer</button>
         <button class="event-btn" onclick="setReminder('${e.id}')">Rappel</button>
         ${e.owned ? `<button class="event-btn" onclick="editEvent('${e.id}')">Modifier</button><button class="event-btn danger" onclick="deleteEvent('${e.id}')">Supprimer</button>` : ''}
       </div>
@@ -1019,7 +1018,7 @@ function deleteEvent(id) {
   showToast('Programme supprimé.');
 }
 
-function viewEvent(id) {
+function participateEvent(id) {
   const event = events.find(e => e.id === id);
   if (!event) return;
   currentEventId = id;
@@ -1132,20 +1131,33 @@ function closeModal() {
 
 function submitInscription() {
   const nom = document.getElementById('inscNom').value.trim();
+  const tel = document.getElementById('inscTel').value.trim().replace(/\s+/g, '');
+  const nbreRaw = document.getElementById('inscNbre').value;
+  const nbre = nbreRaw === '5+' ? 5 : Number(nbreRaw);
   if (!nom) { showToast('Veuillez entrer votre nom.'); return; }
+  if (!tel) { showToast('Veuillez entrer votre numéro WhatsApp.'); return; }
   if (currentEventId) {
     const event = events.find(e => e.id === currentEventId);
     if (event) {
-      event.participants = (event.participants || 0) + 1;
+      participantsByEvent[currentEventId] = participantsByEvent[currentEventId] || {};
+      if (participantsByEvent[currentEventId][tel]) {
+        closeModal();
+        showToast('Ce numéro participe déjà à ce programme.');
+        currentEventId = null;
+        return;
+      }
+      participantsByEvent[currentEventId][tel] = { nom, nbre, date: new Date().toISOString() };
+      localStorage.setItem('participantsByEvent', JSON.stringify(participantsByEvent));
+      event.participants = (event.participants || 0) + nbre;
       persistUserEvents();
       renderEvents();
     }
   }
   closeModal();
-  showToast('Inscription confirmée ! Vous recevrez un rappel. Béni sois-tu !');
+  showToast(`Participation confirmée pour ${nbre} personne(s).`);
   document.getElementById('inscNom').value = '';
   document.getElementById('inscTel').value = '';
-  document.getElementById('inscEmail').value = '';
+  document.getElementById('inscNbre').value = '1';
   currentEventId = null;
 }
 
